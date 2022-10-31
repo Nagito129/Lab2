@@ -192,11 +192,11 @@ int main(){
             case 7:
                 //Поменять местами элементы массива (8)
                 int i1, i2;
-                s = steady_clock::now();
                 cout << "Введите индекс 1 элемента: ";
                 cin >> i1;
                 cout << endl << "Введите индекс 2 элемента: ";
                 cin >> i2;
+                s = steady_clock::now();
                 swap (arr[i1], arr[i2]);
                 e = steady_clock::now();
                 cout << endl << "Время замены элементов (наносекунды): "<< duration_cast<nanoseconds>(e - s).count() << endl;
