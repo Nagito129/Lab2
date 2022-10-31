@@ -7,7 +7,7 @@ using namespace chrono;
 int main(){
     time_point<steady_clock, duration<__int64, ratio<1, 1000000000>>> s, e;
     srand(time(0));
-    setlocale(LC_ALL, "ru_RU.UTF-8"); //Я пишу в CLion, тут по другому русский язык подключать надо, в отличии от VS
+    setlocale(LC_ALL, "ru_RU.UTF-8"); //В CLion по другому русский язык подключать надо, в отличии от VS
     system("chcp 65001");
     const int n = 100;
     int arr[n], r, sort = 0, sr, nm, k,  max = -101, min = 101;
