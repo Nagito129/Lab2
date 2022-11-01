@@ -140,6 +140,7 @@ int main(){
                         break;
                     }
                 }
+                k = 0
                 cout << endl << "Неотсортированный массив" << endl;
                 cout << "Индексы равных элементов: ";
                 s = steady_clock::now();
