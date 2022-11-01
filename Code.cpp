@@ -1,5 +1,6 @@
 #include <iostream>
 #include <chrono>
+#include <cmath>
 using namespace std;
 using namespace chrono;
 
@@ -7,19 +8,23 @@ using namespace chrono;
 int main(){
     time_point<steady_clock, duration<__int64, ratio<1, 1000000000>>> s, e;
     srand(time(0));
-    setlocale(LC_ALL, "ru_RU.UTF-8"); //В CLion по другому русский язык подключать надо, в отличии от VS
+    setlocale(LC_ALL, "ru_RU.UTF-8"); //Я пишу в CLion, тут по другому русский язык подключать надо, в отличии от VS
     system("chcp 65001");
     const int n = 100;
-    int arr[n], r, sort = 0, sr, nm, k,  max = -101, min = 101;
+    int arr[n], arr_[n];
+    int r, sort = 0, sr, nm, k,  max, min;
 
     //Создание массива (1)
     cout << "Создан неотсортированный массив из 100 элементов: ";
     for (int i = 0; i < n; i++){
         arr[i] = rand() % 198 - 99;
+        arr_[i] = arr[i];
         cout << arr[i] << " ";
     }
     sort = 0; //Проверка на сортировку
-    cout << endl << endl;
+    cout << endl << "Для продолжения нажмите enter";
+    getchar();
+    cout << endl;
 
     while (true){
 
@@ -33,28 +38,32 @@ int main(){
         "6 - найти кол-во элементов отсортированного массива, больше введённого вами числа\n" <<
         "7 - поменять местами элементы массива\n" <<
         "0 - выйти из программы\n";
-        
+
         cout << "Ваш выбор: ";
         cin >> r;
         if (r == 0) break;
         switch (r){
-            
+
             case 1:
                 //Создание нового массива (1)
                 cout << "Создан неотсортированный массив из 100 элементов: ";
                 for (int i = 0; i < n; i++){
                     arr[i] = rand() % 198 - 99;
+                    arr_[i] = arr[i];
                     cout << arr[i] << " ";
                 }
                 sort = 0;
-                cout << endl << endl;
+                cout << endl << "Для продолжения нажмите enter";
+                getchar();
+                getchar();
+                cout << endl;
                 break;
 
             case 2:
                 //Сортировка массива shaker-sort (2)
-                s = steady_clock::now();
                 nm = n - 1;
                 cout << "Получен отсортированный массив из 100 элементов: ";
+                s = steady_clock::now();
                 for (int i = 0; i < n; i++){
                     for(int j = 0; j < n - 1 - i; j++){
                         if (arr[j] > arr[j+1]){
@@ -65,42 +74,46 @@ int main(){
                         }
                     }
                 }
+                e = steady_clock::now();
                 for (int i = 0; i < n; i++){
                     cout << arr[i] << " ";
                 }
                 sort = 1;
-                e = steady_clock::now();
-                cout << endl << "Время сортировки (наносекунды): "<< duration_cast<nanoseconds>(e - s).count() << endl << endl;
+                cout << endl << "Время сортировки (наносекунды): "<< duration_cast<nanoseconds>(e - s).count();
+                cout << endl << "Для продолжения нажмите enter";
+                getchar();
+                getchar();
+                cout << endl;
                 break;
 
             case 3:
                 //Нахождение max и min элемента массива (3)
                 max = -101;
                 min = 101;
-                if (sort == 1){
-                    s = steady_clock::now();
-                    max = arr[n-1];
-                    min = arr[0];
-                    cout << "Отсортированный массив" << endl;
-                    cout << "Максимальный элемент массива: " << max << endl << "Минимальный элемент массива: " << min;
-                    e = steady_clock::now();
-                    cout << endl << "Время поиска (наносекунды): "<< duration_cast<nanoseconds>(e - s).count() << endl << endl;
-                }
-                else{
-                    s = steady_clock::now();
-                    cout << "Неотсортированный массив" << endl;
-                    for (int i = 0; i < n; i++){
-                        if (arr[i] > max){
-                            max = arr[i];
-                        }
-                        if (arr[i] < min){
-                            min = arr[i];
-                        }
+
+                s = steady_clock::now();
+                max = arr[n-1];
+                min = arr[0];
+                e = steady_clock::now();
+                cout << "Максимальный элемент массива: " << max << endl << "Минимальный элемент массива: " << min;
+                cout << endl << "Время поиска в отсортированном массиве (наносекунды): "<< duration_cast<nanoseconds>(e - s).count();
+
+                s = steady_clock::now();
+                for (int i = 0; i < n; i++) {
+                    if (arr_[i] > max) {
+                        max = arr_[i];
                     }
-                    cout << "Максимальный элемент массива: " << max << endl << "Минимальный элемент массива: " << min;
-                    e = steady_clock::now();
-                    cout << endl << "Время поиска (наносекунды): "<< duration_cast<nanoseconds>(e - s).count() << endl << endl;
+                    if (arr_[i] < min) {
+                        min = arr_[i];
+                    }
                 }
+                e = steady_clock::now();
+                cout << endl << "Время поиска в неотсортированном массиве (наносекунды): "<< duration_cast<nanoseconds>(e - s).count();
+                cout << endl << "Для продолжения нажмите enter";
+                getchar();
+                getchar();
+                cout << endl;
+
                 break;
 
             case 4:
@@ -111,38 +124,39 @@ int main(){
                     sr += 1;
                 }
                 sr /= 2;
-                cout << "Среднее значение max и min: " << sr << endl;
-                if (sort == 1) {
-                    s = steady_clock::now();
-                    cout << "Отсортированный массив" << endl;
-                    cout << "Индексы равных элементов: ";
-                    for(int i = 0; i < n; i++){
-                        if (arr[i] == sr){
-                            cout << i << " ";
-                            k++;
-                        }
-                        if (arr[i] > sr){
-                            e = steady_clock::now();
-                            cout << endl << "Кол-во равных элементов: " << k;
-                            cout << endl << "Время поиска (наносекунды): "<< duration_cast<nanoseconds>(e - s).count() << endl << endl;
-                            break;
-                        }
+                cout << "Среднее значение max и min: " << sr << endl << endl;
+                cout << "Отсортированный массив" << endl;
+                cout << "Индексы равных элементов: ";
+                s = steady_clock::now();
+                for(int i = 0; i < n; i++) {
+                    if (arr[i] == sr) {
+                        cout << i << " ";
+                        k++;
+                    }
+                    if (arr[i] > sr){
+                        e = steady_clock::now();
+                        cout << endl << "Кол-во равных элементов: " << k;
+                        cout << endl << "Время поиска (наносекунды): "<< duration_cast<nanoseconds>(e - s).count() << endl;
+                        break;
                     }
                 }
-                else {
-                    s = steady_clock::now();
-                    cout << "Неотсортированный массив" << endl;
-                    cout << "Индексы равных элементов: ";
-                    for (int i = 0; i < n; i++) {
-                        if (arr[i] == sr) {
-                            cout << i << " ";
-                            k++;
-                        }
+                cout << endl << "Неотсортированный массив" << endl;
+                cout << "Индексы равных элементов: ";
+                s = steady_clock::now();
+                for (int i = 0; i < n; i++) {
+                    if (arr[i] == sr) {
+                        cout << i << " ";
+                        k++;
                     }
-                    e = steady_clock::now();
-                    cout << endl << "Кол-во равных элементов: " << k;
-                    cout << endl << "Время поиска (наносекунды): "<< duration_cast<nanoseconds>(e - s).count() << endl << endl;
                 }
+                e = steady_clock::now();
+                cout << endl << "Кол-во равных элементов: " << k;
+                cout << endl << "Время поиска (наносекунды): "<< duration_cast<nanoseconds>(e - s).count();
+                cout << endl << "Для продолжения нажмите enter";
+                getchar();
+                getchar();
+                cout << endl;
+
                 break;
 
             case 5:
@@ -160,10 +174,18 @@ int main(){
                             break;
                         }
                     }
-                    cout << endl << "Чисел меньше " << a << ": " << k << endl;
+                    cout << endl << "Чисел меньше " << a << ": " << k;
+                    cout << endl << "Для продолжения нажмите enter";
+                    getchar();
+                    getchar();
+                    cout << endl;
                 }
                 else{
-                    cout << "Сначала отсортируйте массив" << endl;
+                    cout << "Сначала отсортируйте массив" ;
+                    cout << endl << "Для продолжения нажмите enter";
+                    getchar();
+                    getchar();
+                    cout << endl;
                 }
                 break;
 
@@ -182,10 +204,18 @@ int main(){
                             break;
                         }
                     }
-                    cout << endl << "Чисел больше " << b << ": " << k << endl << endl;
+                    cout << endl << "Чисел больше " << b << ": " << k;
+                    cout << endl << "Для продолжения нажмите enter";
+                    getchar();
+                    getchar();
+                    cout << endl;
                 }
                 else{
-                    cout << "Сначала отсортируйте массив" << endl << endl;
+                    cout << "Сначала отсортируйте массив";
+                    cout << endl << "Для продолжения нажмите enter";
+                    getchar();
+                    getchar();
+                    cout << endl;
                 }
                 break;
 
@@ -204,7 +234,10 @@ int main(){
                 for (int i = 0; i < n; i++){
                     cout << arr[i] << " ";
                 }
-                cout << endl << endl;
+                cout << endl << "Для продолжения нажмите enter";
+                getchar();
+                getchar();
+                cout << endl;
                 break;
 
             default:
